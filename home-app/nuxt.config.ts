@@ -12,7 +12,11 @@ export default defineNuxtConfig({
     ],
   },
   debug: true,
-  modules: ['@nuxt/eslint', '@nuxt/icon',  '@primevue/nuxt-module'],
+  modules: ['@nuxt/eslint',
+            '@nuxt/icon',
+            '@sidebase/nuxt-auth',
+            '@pinia/nuxt',
+            '@primevue/nuxt-module'],
   primevue: {
     options: {
       theme: {
@@ -32,5 +36,22 @@ export default defineNuxtConfig({
         name: 'zodResolver',
       },
     ]
+  },
+  runtimeConfig: {
+    public : {
+      apiBase: process.env.API_BASE_URL,
+    }
+  },
+  auth: {
+    originEnvKey: 'NUXT_BASE_URL',
+    provider: {
+      type: 'local',
+      endpoints: {
+        signIn: { path: '/auth/login', method: 'post' },
+        signOut: { path: '/auth/logout', method: 'post' },
+        signUp: { path: '/auth/register', method: 'post' },
+        getSession: { path: '/auth/session', method: 'get' },
+      }
+    }
   }
 })

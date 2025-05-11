@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-const { authUser, isAuthenticated } = useAuthUser();
+
 
 definePageMeta({
   middleware: 'auth-check',

@@ -8,12 +8,20 @@
       <li><NuxtLink to="/mypage">마이페이지</NuxtLink></li>
     </ul>
   </div>
+
+  <div>
+    hi: {{ config.public }}
+  </div>
+
   <div>
     <h2>로그인 상태</h2>
+    <div>
+       You are currently {{ status }}.
+    </div>
     <div v-if="isAuthenticated">
       <p>로그인 상태입니다.</p>
       <p>{{ authUser }}</p>
-      <Button label="로그아웃" @click="signOut" />
+      <Button label="로그아웃" />
     </div>
     <div v-else>
       <p>로그인 상태가 아닙니다.</p>
@@ -25,7 +33,7 @@
 </template>
 
 <script setup>
-const { authUser, isAuthenticated } = useAuthUser();
-const { signOut } = useAuth();
-
+const { status } = useAuth()
+const isAuthenticated = ref(false);
+const config = useRuntimeConfig()
 </script>

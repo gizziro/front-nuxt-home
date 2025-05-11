@@ -26,7 +26,6 @@ definePageMeta({
 });
 
 import { useToast } from "primevue/usetoast";
-const { signIn } = useAuth();
 
 const toast = useToast();
 const initialValues = ref({
@@ -46,7 +45,6 @@ const onFormSubmit = async ({ values, valid }) => {
     if (valid) 
     {
         console.log(`id : ${values.id}, password : ${values.password}`)
-        signIn(values.id, values.password);
         toast.add({ severity: 'success', summary: '로그인에 성공하였습니다.', life: 3000 });
         await navigateTo({ path: '/' });
     }
