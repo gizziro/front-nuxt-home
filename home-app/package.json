@@ -24,6 +24,7 @@
     "eslint": "^9.26.0",
     "nuxt": "^3.17.2",
     "pinia": "^3.0.2",
+    "primeicons": "^7.0.0",
     "primevue": "^4.3.4",
     "tailwindcss": "^4.1.6",
     "unenv": "^1.10.0",
@@ -32,7 +33,6 @@
     "zod": "^3.24.4"
   },
   "devDependencies": {
-    "@sidebase/nuxt-auth": "^0.10.1",
     "dotenv-cli": "^8.0.0"
   }
 }
