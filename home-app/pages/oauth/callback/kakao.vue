@@ -1,5 +1,3 @@
-"// īī�� �α��� �ݹ� ������" 
-
 <template>
   <div class="flex flex-col items-center justify-center min-h-screen p-4 text-center">
     <Card class="w-full max-w-md shadow-lg">
@@ -65,6 +63,7 @@ const errorMessage = ref('');
 const successMessage = ref('');
 const userData = ref(null);
 
+
 // URL에서 파라미터 가져오기
 const code = route.query.code;
 const state = route.query.state;
@@ -103,7 +102,7 @@ onMounted(async () => {
 
   try {
     // 1. 서버에 인증 코드를 보내 액세스 토큰 받기
-    const tokenResponse = await $fetch(`https://kauth.kakao.com/oauth/token`, {
+    const tokenResponse = await $fetch(`${config.public.apiBase}/api/v1/auth/social/token/kakao`, {
       method: 'POST',
       body: {
         code,
