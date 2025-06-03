@@ -105,7 +105,7 @@
 
 <script setup>
 definePageMeta({
-  middleware: ['guest-only'],
+  middleware: ['guest-check'],
 });
 
 import { useToast } from "primevue/usetoast";

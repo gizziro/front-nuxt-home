@@ -56,9 +56,9 @@
 </template>
 
 <script setup>
-// definePageMeta({
-//   middleware: ['guest-only'],
-// });
+definePageMeta({
+  middleware: ['guest-check'],
+});
 
 import { useToast } from "primevue/usetoast";
 
@@ -73,6 +73,10 @@ const rememberMe = ref(false);
 const isLoading = ref(false);
 const { loginWithKakao } = useSocialLogin();
 
+const { signIn } = useAuthStore();
+
+
+
 const resolver = ref(zodResolver(
     z.object({
         id: z.string().min(1, { message: '아이디를 입력해주세요.' }),
@@ -80,23 +84,23 @@ const resolver = ref(zodResolver(
     })
 ));
 
+
+
+
 const onFormSubmit = async ({ values, valid }) => {
-    if (valid) 
-    {
-        const response = await $fetch(`${config.public.apiBase}/api/v1/auth/login`, {
-            method: 'POST',
-            body: {
-                userId: valid ? values.id : '',
-                password: valid ? values.password : '',
-            }
-        });
+    if (valid) {
+        try {
+            await signIn(values.id, values.password);
+            // 성공 시 store에서 자동으로 리다이렉트됨
+            toast.add({ severity: 'success', summary: '로그인에 성공하였습니다.', life: 3000 });
 
-
-        console.log(`id : ${values.id}, password : ${values.password}`)
-        toast.add({ severity: 'success', summary: '로그인에 성공하였습니다.', life: 3000 });
-        await navigateTo({ path: '/' });
+            await navigateTo('/'); // 문자열로 경로 전달
+        } catch (error) {
+            toast.add({ severity: 'warn', summary: '로그인에 실패하였습니다.', life: 3000 });
+        }
     }
 };
+
 
 const kakaoLogin = () => {
     isLoading.value = true;

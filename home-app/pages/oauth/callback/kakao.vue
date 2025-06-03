@@ -46,7 +46,7 @@
 
 <script setup>
 definePageMeta({
-  middleware: ['guest-only'],
+  middleware: ['guest-check'],
 });
 
 import { useToast } from "primevue/usetoast";
@@ -54,6 +54,8 @@ import { useToast } from "primevue/usetoast";
 const route = useRoute();
 const config = useRuntimeConfig();
 const toast = useToast();
+
+const { socialSignIn } = useAuthStore();
 
 const loading = ref(true);
 const error = ref(false);
@@ -114,99 +116,12 @@ onMounted(async () => {
       }
     }); 
 
-    console.log(tokenResponse.token)
-
-    if (!tokenResponse.result || !tokenResponse.accessToken) {
+    if (!tokenResponse.success || !tokenResponse.data.token.accessToken) {
       throw new Error('액세스 토큰을 받지 못했습니다.');
     }
 
-    const accessToken = tokenResponse.accessToken;
+    socialSignIn(tokenResponse);
 
-    // 2. 액세스 토큰으로 사용자 정보 조회
-    // const userInfoResponse = await $fetch(`${config.public.apiBase}/api/v1/oauth2/user-info`, {
-    //   method: 'POST',
-    //   body: {
-    //     provider: 'KAKAO',
-    //     access_token: accessToken
-    //   }
-    // });
-
-    // if (!userInfoResponse.success) {
-    //   throw new Error('사용자 정보를 가져오지 못했습니다.');
-    // }
-
-    // 사용자 정보 저장
-    // userData.value = userInfoResponse.data;
-
-    // 3. 기존 사용자인지 확인 (providerId로 확인)
-    // const checkUserResponse = await $fetch(`${config.public.apiBase}/api/v1/auth/check-social-user`, {
-    //   method: 'POST',
-    //   body: {
-    //     provider: 'KAKAO',
-    //     providerId: userData.value.id
-    //   }
-    // });
-
-
-    if(tokenResponse.status = "PENDING")
-    {
-        // 신규 사용자면 추가 정보 입력 페이지로 이동 준비
-        isNewUser.value   = true;
-        userData.value   = tokenResponse;
-        sessionStorage.setItem('kakao_user_data', JSON.stringify(userData.value));
-    }
-
-
-
-
-    // if (checkUserResponse.success) {
-    //   if (checkUserResponse.data.exists) {
-    //     // 기존 사용자면 로그인 처리
-    //     const loginResponse = await $fetch(`${config.public.apiBase}/api/v1/auth/social-login`, {
-    //       method: 'POST',
-    //       body: {
-    //         provider: 'KAKAO',
-    //         providerId: userData.value.id,
-    //         device: {
-    //           deviceId: Math.random().toString(36).substring(2, 15),
-    //           deviceType: 'WEB',
-    //           deviceName: navigator?.userAgent || 'Unknown'
-    //         }
-    //       }
-    //     });
-
-    //     if (loginResponse.success && loginResponse.data?.accessToken) {
-    //       // 토큰 저장
-    //       localStorage.setItem('access_token', loginResponse.data.accessToken);
-    //       if (loginResponse.data.refreshToken) {
-    //         localStorage.setItem('refresh_token', loginResponse.data.refreshToken);
-    //       }
-
-    //       // 로그인 성공
-    //       success.value = true;
-    //       successMessage.value = '카카오 계정으로 로그인이 완료되었습니다.';
-          
-    //       // 3초 후 홈으로 리다이렉트
-    //       setTimeout(() => {
-    //         navigateTo('/');
-    //       }, 3000);
-    //     } else {
-    //       throw new Error('로그인 처리에 실패했습니다.');
-    //     }
-    //   }
-    //   else 
-    //   {
-    //     // 신규 사용자면 추가 정보 입력 페이지로 이동 준비
-    //     isNewUser.value = true;
-        
-    //     // 카카오에서 받은 사용자 정보를 세션 스토리지에 저장 (추가 정보 페이지에서 사용)
-    //     sessionStorage.setItem('kakao_user_data', JSON.stringify(userData.value));
-    //   }
-    // }
-    // else 
-    // {
-    //   throw new Error('사용자 확인에 실패했습니다.');
-    // }
   } catch (err) {
     console.error('카카오 로그인 콜백 처리 오류:', err);
     error.value = true;

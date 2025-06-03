@@ -120,7 +120,7 @@
 
 <script setup>
 definePageMeta({
-  middleware: ['authCheck'],
+ middleware: ['auth-check']
 });
 
 const emailNotification = ref(true);

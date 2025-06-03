@@ -16,12 +16,20 @@
           
           <!-- 로그인/회원가입 버튼 -->
           <div class="flex items-center space-x-3">
-            <NuxtLink to="/login">
-              <Button label="로그인" class="p-button-outlined" size="small" />
-            </NuxtLink>
-            <NuxtLink to="/register">
-              <Button label="회원가입" severity="info" size="small" />
-            </NuxtLink>
+            <template v-if="isAuthenticated">
+              <NuxtLink to="/mypage">
+                <Button label="마이페이지" severity="secondary" size="small" />
+              </NuxtLink>
+              <Button label="로그아웃" severity="danger" size="small" @click="handleLogout" />
+            </template>
+            <template v-else>
+              <NuxtLink to="/login">
+                <Button label="로그인" class="p-button-outlined" size="small" />
+              </NuxtLink>
+              <NuxtLink to="/register">
+                <Button label="회원가입" severity="info" size="small" />
+              </NuxtLink>
+            </template>
           </div>
         </div>
         
@@ -45,15 +53,23 @@
 
 <script setup>
 // 필요한 API 상태 확인
+const authStore = useAuthStore()
+const isAuthenticated = computed(() => authStore.isAuthenticated)
+
+
 const config = useRuntimeConfig()
 let data = null
 let error = null
 
-try {
-  data = await $fetch(`${config.public.apiBase}/v1/health`)
-  console.log('API 상태 확인:', data)
-} catch (err) {
-  error = err
-  console.error('API 연결 오류:', err)
-}
+
+const handleLogout = async () => {
+  try {
+    await authStore.signOut();
+    // 성공 시 store에서 자동으로 리다이렉트됨
+    await navigateTo('/login');
+  } catch (error) {
+      toast.add({ severity: 'warn', summary: '로그인에 실패하였습니다.', life: 3000 });
+  }
+};
+
 </script>
