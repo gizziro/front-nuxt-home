@@ -67,6 +67,8 @@ const initialValues = ref({
     id: '',
     password: ''
 });
+
+const config = useRuntimeConfig();
 const rememberMe = ref(false);
 const isLoading = ref(false);
 const { loginWithKakao } = useSocialLogin();
@@ -81,6 +83,15 @@ const resolver = ref(zodResolver(
 const onFormSubmit = async ({ values, valid }) => {
     if (valid) 
     {
+        const response = await $fetch(`${config.public.apiBase}/api/v1/auth/login`, {
+            method: 'POST',
+            body: {
+                userId: valid ? values.id : '',
+                password: valid ? values.password : '',
+            }
+        });
+
+
         console.log(`id : ${values.id}, password : ${values.password}`)
         toast.add({ severity: 'success', summary: '로그인에 성공하였습니다.', life: 3000 });
         await navigateTo({ path: '/' });
