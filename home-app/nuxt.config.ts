@@ -19,6 +19,10 @@ export default defineNuxtConfig({
             '@nuxt/icon',
             '@pinia/nuxt',
             '@primevue/nuxt-module'],
+  pinia: {
+    autoImports: ['defineStore', 'storeToRefs'],
+    storesDirs: ['./stores/**'],
+  },
   primevue: {
     options: {
       theme: {

@@ -3,12 +3,15 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "debug:env": "dotenv -e .env.prd -- node -e \"console.log(process.env)\"",
     "build": "nuxi build",
+    "build:prod": "dotenv -e .env.prd -- nuxi build",
     "dev": "nuxi dev --host",
     "dev:local": "dotenv -e .env.local -- nuxi dev --host",
     "dev:test": "dotenv -e .env.test -- nuxi dev --host",
     "generate": "nuxi generate",
     "preview": "nuxi preview",
+    "preview:prod": "dotenv -e .env.prd -- nuxi preview",
     "postinstall": "nuxi prepare",
     "start": "node .output/server/index.mjs"
   },
@@ -24,6 +27,7 @@
     "eslint": "^9.26.0",
     "nuxt": "^3.17.2",
     "pinia": "^3.0.2",
+    "pinia-plugin-persistedstate": "^4.3.0",
     "primeicons": "^7.0.0",
     "primevue": "^4.3.4",
     "tailwindcss": "^4.1.6",
